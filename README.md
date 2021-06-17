@@ -22,9 +22,9 @@ const callbackHandler = azureFunctionFastify(app, opts, () => {
 
 ### Options
 
-| property        | description                    | default value |
-| --------------- | ------------------------------ | ------------- |
-| binaryMimeTypes | Mime types to handle as Binary | []            |
+| property        | description                                                                     | default value |
+| --------------- | ------------------------------------------------------------------------------- | ------------- |
+| binaryMimeTypes | Mime types to handle as Binary. Other mime types will be parsed as String Utf-8 | []            |
 
 ## Example
 
@@ -50,3 +50,6 @@ module.exports = handler;
 ```
 
 ## Notes
+
+- Stateless only
+- Currently there is no proper way to log through the functions (as `context.log` is not available in the fasitfy app)
