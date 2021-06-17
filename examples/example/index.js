@@ -3,7 +3,7 @@ const azureFunctionFastify = require('../../index')
 
 const app = fastify()
 app.get('/api/example', async (request, reply) => {
-  console.log('set')
+  request.log.info('Setting the cookie')
   reply.header('Set-Cookie', 'i=love; path=/')
   return reply.send({ test: 'get example' })
 })
