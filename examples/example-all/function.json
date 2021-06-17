@@ -21,7 +21,6 @@
     {
       "type": "http",
       "direction": "out",
-      "dataType": "binary",
       "name": "res"
     }
   ]

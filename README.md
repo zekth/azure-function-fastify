@@ -4,7 +4,23 @@ Inspired by the AWSLABS [aws-serverless-express](https://github.com/awslabs/aws-
 
 **No use of internal sockets, makes use of Fastify's [inject](https://www.fastify.io/docs/latest/Testing/#testing-with-http-injection) function.**
 
-## Options
+## Usage
+
+```js
+const fastify = require('fastify');
+const azureFunctionFastify = require('azure-function-fastify');
+
+const app = fastify();
+const opts = {
+  binaryMimeTypes: ['image/jpg', 'image/png'],
+};
+const promiseHandler = azureFunctionFastify(app, opts);
+const callbackHandler = azureFunctionFastify(app, opts, () => {
+  console.log("I'm the callback");
+});
+```
+
+### Options
 
 | property        | description                    | default value |
 | --------------- | ------------------------------ | ------------- |
@@ -27,8 +43,8 @@ const handler = azureFunctionFastify(app);
 if (require.main === module) {
   // called directly i.e. "node app"
   app.listen(3000, (err) => {
-    if (err) console.error(err)
-  })
+    if (err) console.error(err);
+  });
 }
 module.exports = handler;
 ```

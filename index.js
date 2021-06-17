@@ -1,4 +1,4 @@
-module.exports = (app, options) => {
+module.exports = (app, options, callback) => {
   options = options || {}
   const binaryMimes = options.binaryMimeTypes || []
   const handler = (context) => {
@@ -39,7 +39,8 @@ module.exports = (app, options) => {
         resolve(context)
       })
     })
-    return prom
+    if (!callback) return prom
+    prom.then((_ctx) => callback(null, _ctx)).catch(callback)
   }
   return handler
 }

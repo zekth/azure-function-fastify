@@ -1,17 +1,18 @@
 import fastify from 'fastify';
-import azureFunctionFastify, { AzureFunctionImpl } from '.';
+import azureFunctionFastify, { PromiseHandler, CallbackHandler } from '.';
 
 import { expectType, expectError, expectAssignable } from 'tsd';
 
 const app = fastify();
 
-expectType<AzureFunctionImpl>(azureFunctionFastify(app));
-expectType<AzureFunctionImpl>(azureFunctionFastify(app, {}));
-expectType<AzureFunctionImpl>(
-  azureFunctionFastify(app, { binaryMimeTypes: [] })
-);
-expectType<AzureFunctionImpl>(
+expectType<PromiseHandler>(azureFunctionFastify(app));
+expectType<PromiseHandler>(azureFunctionFastify(app, {}));
+expectType<PromiseHandler>(azureFunctionFastify(app, { binaryMimeTypes: [] }));
+expectType<PromiseHandler>(
   azureFunctionFastify(app, { binaryMimeTypes: ['foo'] })
+);
+expectType<CallbackHandler>(
+  azureFunctionFastify(app, { binaryMimeTypes: ['foo'] }, () => {})
 );
 
 expectError(azureFunctionFastify(app, { binaryMimeTypes: [2] }));
