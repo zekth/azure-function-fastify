@@ -1,37 +1,36 @@
-# skeleton
+# Azure Function Fastify
 
-Template repository to create standardized Fastify plugins.
+Inspired by the AWSLABS [aws-serverless-express](https://github.com/awslabs/aws-serverless-express) library tailor made for the [Fastify](https://www.fastify.io/) web framework.
 
-# Getting started
+**No use of internal sockets, makes use of Fastify's [inject](https://www.fastify.io/docs/latest/Testing/#testing-with-http-injection) function.**
 
-- Click on `Use this template` above to create a new repository based on this repository.
+## Options
 
-# What's included?
+| property        | description                    | default value |
+| --------------- | ------------------------------ | ------------- |
+| binaryMimeTypes | Mime types to handle as Binary | []            |
 
-1. Github CI Actions for installing, testing your package.
-2. Github CI Actions to validate different package managers.
-3. Dependabot V2 config to automate dependency updates.
-4. Template for the GitHub App [Stale](https://github.com/apps/stale) to mark issues as stale. 
-5. Template for the GitHub App [tests-checker](https://github.com/apps/tests-checker) to check if a PR contains tests.
+## Example
 
-# Repository structure
+```js
+const fastify = require('fastify');
+const azureFunctionFastify = require('azure-function-fastify');
 
+const app = fastify();
+app.get('/example', async (request, reply) => {
+  return reply.send({ test: 'get example' });
+});
+app.post('/example', async (request, reply) => {
+  return reply.send({ test: 'post example', ...request.body });
+});
+const handler = azureFunctionFastify(app);
+if (require.main === module) {
+  // called directly i.e. "node app"
+  app.listen(3000, (err) => {
+    if (err) console.error(err)
+  })
+}
+module.exports = handler;
 ```
-├── .github
-│   ├── workflows
-│   │   ├── ci.yml
-│   │   └── package-manager-ci.yml
-│   ├── .stale.yml
-│   ├── dependabot.yml
-│   └── tests_checker.yml
-│
-├── docs (Documentation)
-│   
-├── examples (Code examples)
-│
-├── test (Application tests)
-│   
-├── types (Typescript types)
-│  
-└── README.md
-```
+
+## Notes

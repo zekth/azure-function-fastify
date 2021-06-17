@@ -1,0 +1,28 @@
+{
+  "logging": {
+    "fileLoggingMode": "always",
+    "logLevel": {
+      "default": "Information"
+    },
+    "console": {
+      "isEnabled": "true"
+    }
+  },
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+
+      "route": "example-all/{*segments}",
+      "methods": ["get", "post"]
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "dataType": "binary",
+      "name": "res"
+    }
+  ]
+}
