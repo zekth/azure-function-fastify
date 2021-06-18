@@ -4,7 +4,7 @@ const contextCache = {}
 const HEADER_INVOKE = 'x-az-fastify-id'
 const CACHE_SYMBOL = 'ctx_cache'
 
-function loggerFactory () {
+function _loggerFactory () {
   function handleLog (verb, o, ...n) {
     let invocationId
     if (o && o.req && o.req.headers && o.req.headers[HEADER_INVOKE]) {
@@ -41,7 +41,7 @@ function loggerFactory () {
       handleLog('verbose', o, ...n)
     },
     child: function (args) {
-      const child = loggerFactory()
+      const child = _loggerFactory()
       return child
     }
   }
@@ -76,7 +76,7 @@ function hooks (app) {
   })
 }
 
-module.exports.loggerFactory = loggerFactory
+module.exports.loggerFactory = ()=>({logger:_loggerFactory(), disableRequestLogging:true})
 module.exports.handlerWrapper = (app, options, callback) => {
   options = options || {}
   const binaryMimes = options.binaryMimeTypes || []

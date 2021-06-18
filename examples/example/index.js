@@ -1,7 +1,7 @@
 const fastify = require('fastify')
 const { handlerWrapper, loggerFactory } = require('../../index')
 
-const app = fastify({ logger: loggerFactory() })
+const app = fastify({ ...loggerFactory() })
 
 app.get('/api/example', async (request, reply) => {
   request.log.info('req Setting the cookie')
