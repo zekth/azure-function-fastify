@@ -2,23 +2,13 @@
 
 const contextCache = {}
 const HEADER_INVOKE = 'x-az-fastify-id'
-const CACHE_SYMBOL = 'ctx_cache'
 
-function _loggerFactory () {
+function _loggerFactory (invocationId) {
+  const _invocation = invocationId
   function handleLog (verb, o, ...n) {
-    let invocationId
-    if (o && o.req && o.req.headers && o.req.headers[HEADER_INVOKE]) {
-      invocationId = o.req.headers[HEADER_INVOKE]
-      o.req[CACHE_SYMBOL][invocationId].log[verb](...n)
-    } else if (o.res && o.res.getHeader(HEADER_INVOKE)) {
-      invocationId = o.res.getHeader(HEADER_INVOKE)
-      if (o.res[CACHE_SYMBOL][invocationId]) {
-        o.res[CACHE_SYMBOL][invocationId].log[verb](...n)
-      }
-    } else {
-      console.log('shrug')
-      console.log(o)
-      console.log(...n)
+    if (contextCache[_invocation]) {
+      console.log(_invocation)
+      contextCache[_invocation].log[verb](o, ...n)
     }
   }
   const lInstance = {
@@ -41,7 +31,7 @@ function _loggerFactory () {
       handleLog('verbose', o, ...n)
     },
     child: function (args) {
-      const child = _loggerFactory()
+      const child = _loggerFactory(_invocation)
       return child
     }
   }
@@ -49,19 +39,11 @@ function _loggerFactory () {
 }
 
 function hooks (app) {
-  app.decorateRequest(CACHE_SYMBOL, {
-    getter () {
-      return contextCache
-    }
-  })
-  app.decorateReply(CACHE_SYMBOL, {
-    getter () {
-      return contextCache
-    }
-  })
   app.addHook('onRequest', (req, res, done) => {
     const invocationId = req.headers[HEADER_INVOKE]
     if (invocationId) {
+      req.log = _loggerFactory(invocationId)
+      res.log = _loggerFactory(invocationId)
       res.header(HEADER_INVOKE, invocationId)
     }
     done()
@@ -74,10 +56,17 @@ function hooks (app) {
     }
     done()
   })
+  app.addHook('onTimeout', (req, res, done) => {
+    const id = res.getHeader(HEADER_INVOKE)
+    if (id) {
+      res.removeHeader(HEADER_INVOKE)
+      delete contextCache[id]
+    }
+    done()
+  })
 }
 
-module.exports.loggerFactory = ()=>({logger:_loggerFactory(), disableRequestLogging:true})
-module.exports.handlerWrapper = (app, options, callback) => {
+const wrapper = (app, options, callback) => {
   options = options || {}
   const binaryMimes = options.binaryMimeTypes || []
   const activateLogging = options.logs || false
@@ -133,3 +122,6 @@ module.exports.handlerWrapper = (app, options, callback) => {
   }
   return handler
 }
+module.exports = wrapper
+module.exports.default = wrapper
+module.exports.azureFunctionFastify = wrapper

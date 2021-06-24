@@ -3,6 +3,7 @@ import { Context } from '@azure/functions';
 
 export interface AzFastifyOption {
   binaryMimeTypes?: string[];
+  logs?: boolean;
 }
 export type PromiseHandler = (context: Context) => Promise<Context>;
 export type CallbackHandler = (context: Context) => void;

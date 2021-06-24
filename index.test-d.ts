@@ -10,6 +10,8 @@ expectType<PromiseHandler>(azureFunctionFastify(app, {}));
 expectType<PromiseHandler>(azureFunctionFastify(app, { binaryMimeTypes: [] }));
 expectType<PromiseHandler>(
   azureFunctionFastify(app, { binaryMimeTypes: ['foo'] })
+);expectType<PromiseHandler>(
+  azureFunctionFastify(app, { binaryMimeTypes: ['foo'], logs:true })
 );
 expectType<CallbackHandler>(
   azureFunctionFastify(app, { binaryMimeTypes: ['foo'] }, () => {})

@@ -1,5 +1,5 @@
 const fastify = require('fastify')
-const { handlerWrapper } = require('../../index')
+const azureFunctionFastify = require('../../index')
 const fs = require('fs')
 const path = require('path')
 
@@ -22,5 +22,5 @@ app.get('/api/example-all/error', async (request, reply) => {
   throw new Error('ERROR')
 })
 
-const handler = handlerWrapper(app, { binaryMimeTypes: ['image/jpeg'] })
+const handler = azureFunctionFastify(app, { binaryMimeTypes: ['image/jpeg'] })
 module.exports = handler
