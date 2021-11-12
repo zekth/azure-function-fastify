@@ -6,7 +6,7 @@
     "test:typescript": "tsd"
   },
   "devDependencies": {
-    "@azure/functions": "^1.2.3",
+    "@azure/functions": "^2.0.0",
     "fastify": "^3.18.0",
     "snazzy": "^9.0.0",
     "standard": "^16.0.3",
