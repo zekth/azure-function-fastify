@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "@azure/functions": "^1.2.3",
-    "fastify": "^3.18.0",
+    "fastify": "^4.10.0",
     "snazzy": "^9.0.0",
     "standard": "^16.0.3",
     "tap": "^16.0.0",
